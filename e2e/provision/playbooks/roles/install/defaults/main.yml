@@ -84,12 +84,3 @@ nephio:
         version: main
         async: 480
         poll: 0
-
-nephio_webui:
-  k8s:
-    namespace: nephio-webui
-  kpt:
-    package:
-      repo_uri: "{{ nephio_catalog_repo_uri }}"
-      pkg: nephio/optional/webui
-      version: main

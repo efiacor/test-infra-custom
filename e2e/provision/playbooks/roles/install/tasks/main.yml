@@ -58,23 +58,6 @@
         password: "{{ gitea.k8s.password }}"
   no_log: true
 
-- name: Deploy Nephio webui
-  ansible.builtin.include_role:
-    name: kpt
-  vars:
-    repo_uri: "{{ nephio_webui.kpt.package.repo_uri }}"
-    pkg: "{{ nephio_webui.kpt.package.pkg }}"
-    version: "{{ nephio_webui.kpt.package.version }}"
-    context: "{{ k8s.context }}"
-    kpt_async: 600
-    kpt_poll: 5
-
-- name: Wait for Nephio webui deployment
-  ansible.builtin.include_tasks: wait_deployments.yml
-  vars:
-    context: "{{ k8s.context }}"
-    namespace: "{{ nephio_webui.k8s.namespace }}"
-
 - name: Create stock repositories
   kubernetes.core.k8s:
     state: present
