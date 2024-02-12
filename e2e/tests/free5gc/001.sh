@@ -37,7 +37,7 @@ source "${LIBDIR}/_utils.sh"
 
 
 regional_pkg_rev=$(porchctl rpkg clone -n default "https://github.com/nephio-project/catalog.git/infra/capi/nephio-workload-cluster@$REVISION" --repository mgmt regional | cut -f 1 -d ' ')
-k8s_wait_exists "packagerev" "$regional_pkg_rev"
+k8s_wait_exists "packagerev" "$regional_pkg_rev" "$HOME/.kube/config"
 
 
 pushd "$(mktemp -d -t "001-pkg-XXX")" >/dev/null
