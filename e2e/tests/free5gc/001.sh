@@ -36,24 +36,24 @@ source "${LIBDIR}/_assertions.sh"
 source "${LIBDIR}/_utils.sh"
 
 
-regional_pkg_rev=$(porchctl rpkg clone -n default "https://github.com/nephio-project/catalog.git/infra/capi/nephio-workload-cluster@$REVISION" --repository mgmt regional | cut -f 1 -d ' ')
+regional_pkg_rev=$(porchctl rpkg clone -n default "https://github.com/nephio-project/catalog.git/infra/capi/nephio-workload-cluster@$REVISION" --repository mgmt regional --kubeconfig "$HOME/.kube/config" | cut -f 1 -d ' ')
 k8s_wait_exists "packagerev" "$regional_pkg_rev" "$HOME/.kube/config"
 
 
 pushd "$(mktemp -d -t "001-pkg-XXX")" >/dev/null
 trap popd EXIT
 
-porchctl rpkg pull -n default "$regional_pkg_rev" regional
+porchctl rpkg pull -n default "$regional_pkg_rev" regional --kubeconfig "$HOME/.kube/config" 
 kpt fn eval --image "gcr.io/kpt-fn/set-labels:v0.2.0" regional -- "nephio.org/site-type=regional" "nephio.org/region=us-west1"
 assert_contains "$(cat regional/workload-cluster.yaml)" "nephio.org/region: us-west1" "Workload cluster doesn't have region label"
 
-porchctl rpkg push -n default "$regional_pkg_rev" regional
+porchctl rpkg push -n default "$regional_pkg_rev" regional --kubeconfig "$HOME/.kube/config" 
 
 # Proposal
-porchctl rpkg propose -n default "$regional_pkg_rev"
+porchctl rpkg propose -n default "$regional_pkg_rev" --kubeconfig "$HOME/.kube/config" 
 
 # Approval
-porchctl rpkg approve -n default "$regional_pkg_rev"
+porchctl rpkg approve -n default "$regional_pkg_rev" --kubeconfig "$HOME/.kube/config" 
 
 k8s_wait_exists "workloadcluster" "regional" "$HOME/.kube/config"
 capi_cluster_ready "regional" "$HOME/.kube/config"
