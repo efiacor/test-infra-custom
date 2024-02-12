@@ -56,4 +56,4 @@ porchctl rpkg propose -n default "$regional_pkg_rev"
 porchctl rpkg approve -n default "$regional_pkg_rev"
 
 k8s_wait_exists "workloadcluster" "regional" "$HOME/.kube/config"
-capi_cluster_ready "regional"
+capi_cluster_ready "regional" "$HOME/.kube/config"
