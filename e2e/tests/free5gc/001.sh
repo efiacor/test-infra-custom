@@ -17,7 +17,6 @@ set -o errexit
 set -o nounset
 [[ ${DEBUG:-false} != "true" ]] || set -o xtrace
 
-export E2EDIR=${E2EDIR:-$HOME/test-infra/e2e}
 # shellcheck source=e2e/defaults.env
 source "$E2EDIR/defaults.env"
 
